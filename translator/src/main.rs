@@ -4,17 +4,17 @@ use std::io::{self, BufRead, Write};
 use std::path::Path;
 
 fn main() -> io::Result<()> {
-    // Get file name from command-line argument
+    // reading file
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        eprintln!("Usage: cargo run -- <input_file>");
+        eprintln!("Error: Missing input file.\nUsage: cargo run -- <input_file>");
         return Ok(());
     }
 
     let filename = &args[1];
-    println!("Processing file: {}", filename);
+    println!("Reading DNA sequence: {}", filename);
 
-    // Example: open file and print first few lines
+    //print few lines
     let path = Path::new(filename);
     let file = File::open(path)?;
     let reader = io::BufReader::new(file);
@@ -26,7 +26,7 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-// Read DNA sequence from .fna or .fasta file
+// read DNA sequence from file
 fn read_sequence(filename: &str) -> io::Result<String> {
     let mut seq = String::new();
     let file = File::open(filename)?;
@@ -39,7 +39,7 @@ fn read_sequence(filename: &str) -> io::Result<String> {
     Ok(seq)
 }
 
-// Generate reverse complement
+// generate reverse complement
 fn reverse_complement(seq: &str) -> String {
     seq.chars()
         .rev()
@@ -82,7 +82,7 @@ fn codon_to_aa(codon: &str) -> char {
     }
 }
 
-// Translate a sequence in one reading frame
+//translate a sequence in one reading frame
 fn translate_frame(seq: &str, start: usize) -> String {
     let mut protein = String::new();
     let chars: Vec<char> = seq.chars().collect();
@@ -95,7 +95,7 @@ fn translate_frame(seq: &str, start: usize) -> String {
     protein
 }
 
-// Create all six frames
+// generate translations for all 6 possible reading frames
 fn six_frame_translation(seq: &str) -> Vec<String> {
     let rev = reverse_complement(seq);
     let mut frames = Vec::new();
